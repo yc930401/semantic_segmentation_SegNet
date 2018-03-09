@@ -6,7 +6,7 @@ A keras implementation of SegNet for semantic segmentation tasks.
 
 The idea to build a SegNet was arisen when I learnt Stanford CS231. I thought it shouldn't be a difficult task, because the idea was very clear to me.
 The only difference between a CNN classification network and a SegNet is to use Upsampling to recover the original image dimensionality. And it should be
-able to deal with images with various sizes. The network structure of a SegNet is shown in the figure below.
+able to deal with images with various sizes. The network structure of a SegNet is shown in the figure below. </br>
 ![SegNet](/segnet_architecture.png) </br>
 However, I encountered some difficulties when building the system.
 
