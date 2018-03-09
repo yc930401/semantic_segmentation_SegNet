@@ -10,106 +10,111 @@ from sklearn.model_selection import train_test_split
 
 n_labels = 21
 kernel = 3
+pool_size = 2
+paths = {'id_path': 'VOCtrainval_11-May-2012/VOCdevkit/VOC2012/ImageSets/Segmentation/trainval.txt',
+             'data_path': 'VOCtrainval_11-May-2012/VOCdevkit/VOC2012/JPEGImages/',
+             'label_path': 'SegmentationClassBboxSeg_Visualization/SegmentationClassBboxErode20CRFAug_Visualization/'}
+
 
 def build_model():
     encoding_layers = [
-        Conv2D(64, (kernel,kernel), padding="same", input_shape=(None, None, 3)),
+        Conv2D(64, (kernel, kernel), padding='same', input_shape=(None, None, 3)),
         BatchNormalization(),
         Activation('relu'),
-        Conv2D(64, (kernel,kernel), padding="same"),
+        Conv2D(64, (kernel, kernel), padding='same'),
         BatchNormalization(),
         Activation('relu'),
-        MaxPooling2D(),
+        MaxPooling2D(pool_size=(pool_size, pool_size)),
 
-        Conv2D(128, (kernel, kernel), padding="same"),
+        Conv2D(128, (kernel, kernel), padding='same'),
         BatchNormalization(),
         Activation('relu'),
-        Conv2D(128, (kernel, kernel), padding="same"),
+        Conv2D(128, (kernel, kernel), padding='same'),
         BatchNormalization(),
         Activation('relu'),
-        MaxPooling2D(),
+        MaxPooling2D(pool_size=(pool_size, pool_size)),
 
-        Conv2D(256, (kernel, kernel), padding="same"),
+        Conv2D(256, (kernel, kernel), padding='same'),
         BatchNormalization(),
         Activation('relu'),
-        Conv2D(256, (kernel, kernel), padding="same"),
+        Conv2D(256, (kernel, kernel), padding='same'),
         BatchNormalization(),
         Activation('relu'),
-        Conv2D(256, (kernel, kernel), padding="same"),
+        Conv2D(256, (kernel, kernel), padding='same'),
         BatchNormalization(),
         Activation('relu'),
-        MaxPooling2D(),
+        MaxPooling2D(pool_size=(pool_size, pool_size)),
 
-        Conv2D(512, (kernel, kernel), padding="same"),
+        Conv2D(512, (kernel, kernel), padding='same'),
         BatchNormalization(),
         Activation('relu'),
-        Conv2D(512, (kernel, kernel), padding="same"),
+        Conv2D(512, (kernel, kernel), padding='same'),
         BatchNormalization(),
         Activation('relu'),
-        Conv2D(512, (kernel, kernel), padding="same"),
+        Conv2D(512, (kernel, kernel), padding='same'),
         BatchNormalization(),
         Activation('relu'),
-        MaxPooling2D(),
+        MaxPooling2D(pool_size=(pool_size, pool_size)),
 
-        Conv2D(512, (kernel, kernel), padding="same"),
+        Conv2D(512, (kernel, kernel), padding='same'),
         BatchNormalization(),
         Activation('relu'),
-        Conv2D(512, (kernel, kernel), padding="same"),
+        Conv2D(512, (kernel, kernel), padding='same'),
         BatchNormalization(),
         Activation('relu'),
-        Conv2D(512, (kernel, kernel), padding="same"),
+        Conv2D(512, (kernel, kernel), padding='same'),
         BatchNormalization(),
         Activation('relu'),
-        MaxPooling2D(),
+        MaxPooling2D(pool_size=(pool_size, pool_size)),
     ]
 
     decoding_layers = [
-        UpSampling2D(),
-        Conv2D(512, (kernel, kernel), padding="same"),
+        UpSampling2D(size=(pool_size, pool_size)),
+        Conv2D(512, (kernel, kernel), padding='same'),
         BatchNormalization(),
         Activation('relu'),
-        Conv2D(512, (kernel, kernel), padding="same"),
+        Conv2D(512, (kernel, kernel), padding='same'),
         BatchNormalization(),
         Activation('relu'),
-        Conv2D(512, (kernel, kernel), padding="same"),
-        BatchNormalization(),
-        Activation('relu'),
-
-        UpSampling2D(),
-        Conv2D(512, (kernel, kernel), padding="same"),
-        BatchNormalization(),
-        Activation('relu'),
-        Conv2D(512, (kernel, kernel), padding="same"),
-        BatchNormalization(),
-        Activation('relu'),
-        Conv2D(512, (kernel, kernel), padding="same"),
+        Conv2D(512, (kernel, kernel), padding='same'),
         BatchNormalization(),
         Activation('relu'),
 
-        UpSampling2D(),
-        Conv2D(256, (kernel, kernel), padding="same"),
+        UpSampling2D(size=(pool_size, pool_size)),
+        Conv2D(512, (kernel, kernel), padding='same'),
         BatchNormalization(),
         Activation('relu'),
-        Conv2D(256, (kernel, kernel), padding="same"),
+        Conv2D(512, (kernel, kernel), padding='same'),
         BatchNormalization(),
         Activation('relu'),
-        Conv2D(256, (kernel, kernel), padding="same"),
-        BatchNormalization(),
-        Activation('relu'),
-
-        UpSampling2D(),
-        Conv2D(128, (kernel, kernel), padding="same"),
-        BatchNormalization(),
-        Activation('relu'),
-        Conv2D(128, (kernel, kernel), padding="same"),
+        Conv2D(256, (kernel, kernel), padding='same'),
         BatchNormalization(),
         Activation('relu'),
 
-        UpSampling2D(),
-        Conv2D(64, (kernel, kernel), padding="same"),
+        UpSampling2D(size=(pool_size, pool_size)),
+        Conv2D(256, (kernel, kernel), padding='same'),
         BatchNormalization(),
         Activation('relu'),
-        Conv2D(64, (kernel, kernel), padding="same"),
+        Conv2D(256, (kernel, kernel), padding='same'),
+        BatchNormalization(),
+        Activation('relu'),
+        Conv2D(128, (kernel, kernel), padding='same'),
+        BatchNormalization(),
+        Activation('relu'),
+
+        UpSampling2D(size=(pool_size, pool_size)),
+        Conv2D(128, (kernel, kernel), padding='same'),
+        BatchNormalization(),
+        Activation('relu'),
+        Conv2D(64, (kernel, kernel), padding='same'),
+        BatchNormalization(),
+        Activation('relu'),
+
+        UpSampling2D(size=(pool_size, pool_size)),
+        Conv2D(64, (kernel, kernel), padding='same'),
+        BatchNormalization(),
+        Activation('relu'),
+        Conv2D(n_labels, (1, 1), padding='valid'),
         BatchNormalization(),
     ]
 
@@ -123,7 +128,6 @@ def build_model():
     autoencoder.decoding_layers = decoding_layers
     for l in autoencoder.decoding_layers:
         autoencoder.add(l)
-    autoencoder.add(Conv2D(n_labels, (kernel, kernel), padding="same"))
     autoencoder.add(Reshape((-1, n_labels)))
     autoencoder.add(Activation('softmax'))
 
@@ -166,9 +170,6 @@ def pascal_palette():
 
 
 def prepare_data():
-    paths = {'id_path': 'VOCtrainval_11-May-2012/VOCdevkit/VOC2012/ImageSets/Segmentation/trainval.txt',
-             'data_path': 'VOCtrainval_11-May-2012/VOCdevkit/VOC2012/JPEGImages/',
-             'label_path': 'SegmentationClassBboxSeg_Visualization/SegmentationClassBboxErode20CRFAug_Visualization/'}
     image_ids = open(paths['id_path'], 'r').read().split('\n')
     train_ids, test_ids = train_test_split(image_ids, test_size=0.33, random_state=2018)
     print('Total data size: {}\nTraining data size: {}\nTest data size: {}\n'
@@ -177,9 +178,6 @@ def prepare_data():
 
 
 def data_generator(image_ids):
-    paths = {'id_path': 'VOCtrainval_11-May-2012/VOCdevkit/VOC2012/ImageSets/Segmentation/trainval.txt',
-             'data_path': 'VOCtrainval_11-May-2012/VOCdevkit/VOC2012/JPEGImages/',
-             'label_path': 'SegmentationClassBboxSeg_Visualization/SegmentationClassBboxErode20CRFAug_Visualization/'}
     x_data = {}
     y_data = {}
 

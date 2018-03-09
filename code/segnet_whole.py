@@ -23,7 +23,7 @@ def build_model():
         Conv2D(64, (kernel, kernel), padding='same'),
         BatchNormalization(),
         Activation('relu'),
-        #MaxPooling2D(pool_size=(pool_size, pool_size)),
+        MaxPooling2D(pool_size=(pool_size, pool_size)),
 
         Conv2D(128, (kernel, kernel), padding='same'),
         BatchNormalization(),
@@ -31,7 +31,7 @@ def build_model():
         Conv2D(128, (kernel, kernel), padding='same'),
         BatchNormalization(),
         Activation('relu'),
-        #MaxPooling2D(pool_size=(pool_size, pool_size)),
+        MaxPooling2D(pool_size=(pool_size, pool_size)),
 
         Conv2D(256, (kernel, kernel), padding='same'),
         BatchNormalization(),
@@ -42,7 +42,7 @@ def build_model():
         Conv2D(256, (kernel, kernel), padding='same'),
         BatchNormalization(),
         Activation('relu'),
-        #MaxPooling2D(pool_size=(pool_size, pool_size)),
+        MaxPooling2D(pool_size=(pool_size, pool_size)),
 
         Conv2D(512, (kernel, kernel), padding='same'),
         BatchNormalization(),
@@ -53,7 +53,7 @@ def build_model():
         Conv2D(512, (kernel, kernel), padding='same'),
         BatchNormalization(),
         Activation('relu'),
-        #MaxPooling2D(pool_size=(pool_size, pool_size)),
+        MaxPooling2D(pool_size=(pool_size, pool_size)),
 
         Conv2D(512, (kernel, kernel), padding='same'),
         BatchNormalization(),
@@ -64,11 +64,11 @@ def build_model():
         Conv2D(512, (kernel, kernel), padding='same'),
         BatchNormalization(),
         Activation('relu'),
-        #MaxPooling2D(pool_size=(pool_size, pool_size)),
+        MaxPooling2D(pool_size=(pool_size, pool_size)),
     ]
 
     decoding_layers = [
-        #UpSampling2D(size=(pool_size, pool_size)),
+        UpSampling2D(size=(pool_size, pool_size)),
         Conv2D(512, (kernel, kernel), padding='same'),
         BatchNormalization(),
         Activation('relu'),
@@ -79,7 +79,7 @@ def build_model():
         BatchNormalization(),
         Activation('relu'),
 
-        #UpSampling2D(size=(pool_size, pool_size)),
+        UpSampling2D(size=(pool_size, pool_size)),
         Conv2D(512, (kernel, kernel), padding='same'),
         BatchNormalization(),
         Activation('relu'),
@@ -90,7 +90,7 @@ def build_model():
         BatchNormalization(),
         Activation('relu'),
 
-        #UpSampling2D(size=(pool_size, pool_size)),
+        UpSampling2D(size=(pool_size, pool_size)),
         Conv2D(256, (kernel, kernel), padding='same'),
         BatchNormalization(),
         Activation('relu'),
@@ -101,7 +101,7 @@ def build_model():
         BatchNormalization(),
         Activation('relu'),
 
-        #UpSampling2D(size=(pool_size, pool_size)),
+        UpSampling2D(size=(pool_size, pool_size)),
         Conv2D(128, (kernel, kernel), padding='same'),
         BatchNormalization(),
         Activation('relu'),
@@ -109,7 +109,7 @@ def build_model():
         BatchNormalization(),
         Activation('relu'),
 
-        #UpSampling2D(size=(pool_size, pool_size)),
+        UpSampling2D(size=(pool_size, pool_size)),
         Conv2D(64, (kernel, kernel), padding='same'),
         BatchNormalization(),
         Activation('relu'),
